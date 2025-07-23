@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Estação de Retratos da Missão - Space Apps Lajeado</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <header>
+        <h1>Estação de Retratos da Missão</h1>
+        <p>Escolha sua moldura, capture o momento e compartilhe sua participação!</p>
+    </header>
+
+    <main>
+        <section class="frame-selector">
+            <h2>1. Escolha sua Moldura:</h2>
+            <div id="frame-options">
+                </div>
+        </section>
+
+        <section class="camera-module">
+            <h2>2. Posicione-se para o Registro:</h2>
+            <div id="camera-container">
+                <video id="video" autoplay playsinline></video>
+                <img id="frame-overlay" src="assets/moldura1.png" alt="Moldura Selecionada">
+            </div>
+            <button id="capture-button">📸 Registrar Momento</button>
+        </section>
+
+        <section class="result-module" style="display: none;">
+            <h2>3. Sua Foto da Missão:</h2>
+            <img id="photo-result" alt="Sua foto com a moldura">
+            <a id="download-link" class="button" download="missao-space-apps-lajeado.png">
+                ⬇️ Baixar Foto
+            </a>
+        </section>
+    </main>
+
+    <canvas id="canvas" style="display: none;"></canvas>
+
+    <script src="script.js"></script>
+</body>
+</html>
