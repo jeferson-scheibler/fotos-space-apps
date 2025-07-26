@@ -54,11 +54,19 @@ document.addEventListener('DOMContentLoaded', () => {
         canvas.height = video.videoHeight;
         
         const context = canvas.getContext('2d');
+        // 1. Vira o "pincel" (contexto) do canvas horizontalmente
+        context.scale(-1, 1);
         
-        // Desenha a imagem da câmera no canvas
+        // 2. Move o ponto de origem para a direita para compensar o espelhamento
+        context.translate(-canvas.width, 0);
+        
+        // Desenha a imagem (agora espelhada) da câmera no canvas
         context.drawImage(video, 0, 0, canvas.width, canvas.height);
 
-        // Carrega e desenha a moldura por cima
+        // Reseta a transformação para que a moldura não seja espelhada junto
+        context.setTransform(1, 0, 0, 1, 0, 0);
+
+        // Carrega e desenha a moldura por cima (agora sem espelhamento)
         const frameImage = new Image();
         frameImage.src = selectedFrameSrc;
         frameImage.onload = () => {
