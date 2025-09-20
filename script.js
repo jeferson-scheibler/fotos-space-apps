@@ -16,6 +16,7 @@ document.addEventListener('DOMContentLoaded', () => {
     // Popula as opções de molduras
     frames.forEach((frame, index) => {
         const img = document.createElement('img');
+        img.src = `assets/${frame}`; // Adiciona a fonte da imagem para a miniatura
         img.alt = `Moldura ${index + 1}`;
         img.onclick = () => selectFrame(frame);
         if (index === 0) img.classList.add('selected');
@@ -55,7 +56,9 @@ document.addEventListener('DOMContentLoaded', () => {
         
         const context = canvas.getContext('2d');
         
-        // Desenha a imagem da câmera no canvas
+        // --- CORREÇÃO APLICADA AQUI ---
+        // As linhas que espelhavam a imagem foram removidas.
+        // Agora a imagem é desenhada diretamente, sem inversão.
         context.drawImage(video, 0, 0, canvas.width, canvas.height);
 
         // Carrega e desenha a moldura por cima
