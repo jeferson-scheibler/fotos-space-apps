@@ -49,72 +49,56 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     // Função para capturar a foto
+    // === Captura 4:5, sem espelhamento, exatamente como o preview ===
     captureButton.addEventListener('click', () => {
-        const container = document.getElementById('camera-container');
+        // resolução final (mantenha 4:5 para casar com o preview)
+        const TARGET_W = 1200;
+        const TARGET_H = 1500;
 
-        // Tamanhos "reais" do vídeo e aspecto do container (preview)
         const vw = video.videoWidth;
         const vh = video.videoHeight;
-        if (!vw || !vh) return; // segurança, caso a câmera ainda não tenha iniciado
+        if (!vw || !vh) return;
 
-        const contW = container.clientWidth;
-        const contH = container.clientHeight;
+        canvas.width  = TARGET_W;
+        canvas.height = TARGET_H;
+        const ctx = canvas.getContext('2d');
 
-        const videoAspect = vw / vh;
-        const containerAspect = contW / contH;
+        // crop que replica object-fit: cover para o aspecto 4:5
+        const videoAspect  = vw / vh;
+        const targetAspect = TARGET_W / TARGET_H;
 
-        // Calcula o retângulo DE ORIGEM (crop) no vídeo para imitar o object-fit: cover
         let sx, sy, sWidth, sHeight;
-        if (videoAspect > containerAspect) {
-            // vídeo mais largo que o container -> corta laterais
+        if (videoAspect > targetAspect) {
+            // vídeo mais largo -> corta laterais
             sHeight = vh;
-            sWidth  = vh * containerAspect;
+            sWidth  = vh * targetAspect;
             sx = (vw - sWidth) / 2;
             sy = 0;
         } else {
-            // vídeo mais alto que o container -> corta topo/baixo
+            // vídeo mais alto -> corta topo/baixo
             sWidth  = vw;
-            sHeight = vw / containerAspect;
+            sHeight = vw / targetAspect;
             sx = 0;
             sy = (vh - sHeight) / 2;
         }
 
-        // Define o canvas no MESMO aspecto do preview (4:5).
-        // Use a resolução que preferir. Aqui uso o tamanho do container para “o que você vê é o que você obtém”.
-        canvas.width  = contW;
-        canvas.height = contH;
+        // desenha o recorte do vídeo (sem espelhar)
+        ctx.drawImage(video, sx, sy, sWidth, sHeight, 0, 0, TARGET_W, TARGET_H);
 
-        const ctx = canvas.getContext('2d');
-
-        // Espelha horizontalmente para ficar igual ao preview (que está com transform: scaleX(-1))
-        ctx.save();
-        ctx.translate(canvas.width, 0);
-        ctx.scale(-1, 1);
-
-        // Desenha o recorte do vídeo já espelhado ocupando todo o canvas
-        ctx.drawImage(
-            video,
-            sx, sy, sWidth, sHeight,   // origem (crop no vídeo)
-            0, 0, canvas.width, canvas.height // destino (canvas)
-        );
-
-        ctx.restore();
-
-        // Desenha a moldura por cima ocupando 100% do canvas
+        // desenha a moldura por cima
         const frameImage = new Image();
-        frameImage.src = selectedFrameSrc;
         frameImage.onload = () => {
-            ctx.drawImage(frameImage, 0, 0, canvas.width, canvas.height);
+            ctx.drawImage(frameImage, 0, 0, TARGET_W, TARGET_H);
 
             const dataUrl = canvas.toDataURL('image/png');
             photoResult.src = dataUrl;
             downloadLink.href = dataUrl;
 
             resultModule.style.display = 'block';
-            window.scrollTo(0, document.body.scrollHeight);
+            resultModule.scrollIntoView({ behavior: 'smooth', block: 'start' });
         };
+        frameImage.src = selectedFrameSrc;
     });
-
 
     // Inicia a câmera ao carregar a página
     initCamera();

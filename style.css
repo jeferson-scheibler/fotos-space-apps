@@ -158,7 +158,8 @@ h2 {
     height: 100%;
     display: block;
     object-fit: cover;             /* Preenche 4:5 sem distorcer */
-    transform: scaleX(-1);         /* “Selfie” espelhada */
+    transform: none;   
+    /* transform: scaleX(-1);         /* “Selfie” espelhada */
 }
 
 #frame-overlay {
@@ -217,6 +218,15 @@ button:hover,
     border-radius: 10px;
     border: 5px solid var(--accent-color);
     box-shadow: 0 0 25px var(--shadow-color);
+}
+
+#photo-result {
+    width: 100%;
+    max-width: 640px;
+    aspect-ratio: 4 / 5;
+    object-fit: cover;
+    display: block;
+    margin: 0 auto;
 }
 
 /* ================================
