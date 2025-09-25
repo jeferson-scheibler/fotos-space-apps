@@ -50,33 +50,71 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Função para capturar a foto
     captureButton.addEventListener('click', () => {
-        // Define o tamanho do canvas para ser o mesmo do vídeo
-        canvas.width = video.videoWidth;
-        canvas.height = video.videoHeight;
-        
-        const context = canvas.getContext('2d');
-        
-        // --- CORREÇÃO APLICADA AQUI ---
-        // As linhas que espelhavam a imagem foram removidas.
-        // Agora a imagem é desenhada diretamente, sem inversão.
-        context.drawImage(video, 0, 0, canvas.width, canvas.height);
+        const container = document.getElementById('camera-container');
 
-        // Carrega e desenha a moldura por cima
+        // Tamanhos "reais" do vídeo e aspecto do container (preview)
+        const vw = video.videoWidth;
+        const vh = video.videoHeight;
+        if (!vw || !vh) return; // segurança, caso a câmera ainda não tenha iniciado
+
+        const contW = container.clientWidth;
+        const contH = container.clientHeight;
+
+        const videoAspect = vw / vh;
+        const containerAspect = contW / contH;
+
+        // Calcula o retângulo DE ORIGEM (crop) no vídeo para imitar o object-fit: cover
+        let sx, sy, sWidth, sHeight;
+        if (videoAspect > containerAspect) {
+            // vídeo mais largo que o container -> corta laterais
+            sHeight = vh;
+            sWidth  = vh * containerAspect;
+            sx = (vw - sWidth) / 2;
+            sy = 0;
+        } else {
+            // vídeo mais alto que o container -> corta topo/baixo
+            sWidth  = vw;
+            sHeight = vw / containerAspect;
+            sx = 0;
+            sy = (vh - sHeight) / 2;
+        }
+
+        // Define o canvas no MESMO aspecto do preview (4:5).
+        // Use a resolução que preferir. Aqui uso o tamanho do container para “o que você vê é o que você obtém”.
+        canvas.width  = contW;
+        canvas.height = contH;
+
+        const ctx = canvas.getContext('2d');
+
+        // Espelha horizontalmente para ficar igual ao preview (que está com transform: scaleX(-1))
+        ctx.save();
+        ctx.translate(canvas.width, 0);
+        ctx.scale(-1, 1);
+
+        // Desenha o recorte do vídeo já espelhado ocupando todo o canvas
+        ctx.drawImage(
+            video,
+            sx, sy, sWidth, sHeight,   // origem (crop no vídeo)
+            0, 0, canvas.width, canvas.height // destino (canvas)
+        );
+
+        ctx.restore();
+
+        // Desenha a moldura por cima ocupando 100% do canvas
         const frameImage = new Image();
         frameImage.src = selectedFrameSrc;
         frameImage.onload = () => {
-            context.drawImage(frameImage, 0, 0, canvas.width, canvas.height);
+            ctx.drawImage(frameImage, 0, 0, canvas.width, canvas.height);
 
-            // Converte o canvas em uma imagem e prepara o download
             const dataUrl = canvas.toDataURL('image/png');
             photoResult.src = dataUrl;
             downloadLink.href = dataUrl;
-            
-            // Mostra o módulo de resultado
+
             resultModule.style.display = 'block';
-            window.scrollTo(0, document.body.scrollHeight); // Rola para o final da página
+            window.scrollTo(0, document.body.scrollHeight);
         };
     });
+
 
     // Inicia a câmera ao carregar a página
     initCamera();
