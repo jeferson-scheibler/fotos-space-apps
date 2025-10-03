@@ -135,14 +135,14 @@ h2 {
 
 /* ===== Toggle de espelhamento ===== */
 .mirror-toggle {
-    margin-top: 1rem;
+    margin-top: 2rem;
     display: inline-flex;
     align-items: center;
     gap: 0.75rem;
 }
 
 .mirror-label {
-    font-size: 0.95rem;
+    font-size: 1.2rem;
     opacity: 0.9;
 }
 
