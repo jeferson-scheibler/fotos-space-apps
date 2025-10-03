@@ -8,6 +8,15 @@ document.addEventListener('DOMContentLoaded', () => {
     const frameOptionsContainer = document.getElementById('frame-options');
     const resultModule = document.querySelector('.result-module');
     const photoResult = document.getElementById('photo-result');
+    const mirrorCheckbox = document.getElementById('mirror-checkbox');
+    
+    let isMirrored = false; // começa desligado por padrão
+
+    // Alterna espelhamento do preview (apenas o <video>)
+    mirrorCheckbox.addEventListener('change', () => {
+        isMirrored = mirrorCheckbox.checked;
+        video.style.transform = isMirrored ? 'scaleX(-1)' : 'none';
+    });
 
     // Lista de molduras
     const frames = ['moldura1.png', 'moldura2.png', 'moldura3.png']; // Adicione os nomes dos seus arquivos aqui
@@ -83,7 +92,19 @@ document.addEventListener('DOMContentLoaded', () => {
         }
 
         // desenha o recorte do vídeo (sem espelhar)
-        ctx.drawImage(video, sx, sy, sWidth, sHeight, 0, 0, TARGET_W, TARGET_H);
+        // ctx.drawImage(video, sx, sy, sWidth, sHeight, 0, 0, TARGET_W, TARGET_H);
+        
+        // desenha o recorte do vídeo respeitando o toggle de espelhamento
+        if (isMirrored) {
+            ctx.save();
+            ctx.translate(TARGET_W, 0);
+            ctx.scale(-1, 1);
+            ctx.drawImage(video, sx, sy, sWidth, sHeight, 0, 0, TARGET_W, TARGET_H);
+            ctx.restore();
+        } else {
+            ctx.drawImage(video, sx, sy, sWidth, sHeight, 0, 0, TARGET_W, TARGET_H);
+        }
+
 
         // desenha a moldura por cima
         const frameImage = new Image();
