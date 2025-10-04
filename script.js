@@ -10,7 +10,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const photoResult = document.getElementById('photo-result');
     const mirrorCheckbox = document.getElementById('mirror-checkbox');
     
-    let isMirrored = false; // começa desligado por padrão
+    let isMirrored = true; // começa ligado por padrão
 
     // Alterna espelhamento do preview (apenas o <video>)
     mirrorCheckbox.addEventListener('change', () => {
