@@ -189,6 +189,14 @@ h2 {
     background: var(--primary-color);
 }
 
+/* Botão só no mobile/telas toque */
+.camera-switch { margin-top: 0.75rem; }
+
+.mobile-only { display: none; }
+@media (max-width: 768px), (pointer: coarse) {
+  .mobile-only { display: block; }
+}
+
 /* ================================
    7) Módulo da Câmera
       <section class="camera-module">
