@@ -8,6 +8,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const frameOptionsContainer = document.getElementById('frame-options');
     const resultModule = document.querySelector('.result-module');
     const photoResult = document.getElementById('photo-result');
+    const googlePhotosLink = document.getElementById('google-photos-link');
     const mirrorCheckbox = document.getElementById('mirror-checkbox');
     
     let isMirrored = false; // começa desligado por padrão
@@ -115,7 +116,7 @@ document.addEventListener('DOMContentLoaded', () => {
             photoResult.src = dataUrl;
             downloadLink.href = dataUrl;
 
-            document.getElementById('google-photos-link').href = 'https://photos.app.goo.gl/J8vgdrM9gUfy5Us97';
+            googlePhotosLink.href = 'https://photos.app.goo.gl/J8vgdrM9gUfy5Us97';
 
             resultModule.style.display = 'block';
             resultModule.scrollIntoView({ behavior: 'smooth', block: 'start' });
