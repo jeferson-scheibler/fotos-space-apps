@@ -115,6 +115,8 @@ document.addEventListener('DOMContentLoaded', () => {
             photoResult.src = dataUrl;
             downloadLink.href = dataUrl;
 
+            document.getElementById('google-photos-link').href = 'https://photos.app.goo.gl/J8vgdrM9gUfy5Us97';
+
             resultModule.style.display = 'block';
             resultModule.scrollIntoView({ behavior: 'smooth', block: 'start' });
         };
