@@ -38,7 +38,23 @@
                 <video id="video" autoplay playsinline></video>
                 <img id="frame-overlay" src="assets/moldura1.png" alt="Moldura Selecionada">
             </div>
-            <button id="capture-button">📸 Registrar momento</button>
+            <!-- Agrupa os botões lado a lado -->
+            <div class="actions-row">
+                <button id="capture-button">📸 Registrar momento</button>
+
+                <!-- input de arquivo escondido -->
+                <input
+                    id="upload-input"
+                    type="file"
+                    accept="image/*"
+                    style="display:none"
+                />
+
+                <!-- label vira o “botão” de upload -->
+                <label for="upload-input" class="button" id="upload-button">
+                    📁 Enviar da galeria
+                </label>
+            </div>
         </section>
 
         <section class="result-module" style="display: none;">

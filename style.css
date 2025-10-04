@@ -272,6 +272,22 @@ button:hover,
     box-shadow: 0 6px 20px var(--shadow-color);
 }
 
+/* Container dos CTAs lado a lado */
+.actions-row {
+  display: flex;
+  gap: 1rem;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+/* Em telas bem pequenas, os botões ocupam toda a largura */
+@media (max-width: 480px) {
+  .actions-row .button,
+  .actions-row button {
+    width: 100%;
+  }
+}
+
 /* ================================
    9) Módulo de Resultado
       <section class="result-module">
